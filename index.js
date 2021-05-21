@@ -28,7 +28,7 @@ const main = async () => {
   const today = "取得日時：" + yyyymmddhhmiss();
   console.log(today);
 
-  //htmlの取得
+  //htmlデータの取得
   const getHTML = async (id, pass, name) => {
     const page = await browser.newPage();
     //画像、css、フォントファイルを拒否する
@@ -94,24 +94,23 @@ const main = async () => {
     const reservedbookList = await frame.$eval(
       "#opac_popup_target > div > div > div > div > div > div.opac_block_big > form:nth-child(3) > div > div.opac_data_list_wrapper > table",
       (e) => {
-        Array.from(e.children[1].children).forEach((v1, i1) => {
-          if (i1 > 0) {
-            const el = e.children[1].children[i1].children[2];
+        Array.from(e.children[1].children).forEach((_, i) => {
+          if (i > 0) {
+            const el = e.children[1].children[i].children[2];
             el.textContent = el.textContent.substring(
               0,
               el.textContent.lastIndexOf("∥")
             );
           }
-          e.children[1].children[i1].children[7].remove();
-          e.children[1].children[i1].children[6].remove();
-          e.children[1].children[i1].children[4].remove();
-          e.children[1].children[i1].children[3].remove();
-          e.children[1].children[i1].children[1].remove();
+          e.children[1].children[i].children[7].remove();
+          e.children[1].children[i].children[6].remove();
+          e.children[1].children[i].children[4].remove();
+          e.children[1].children[i].children[3].remove();
+          e.children[1].children[i].children[1].remove();
         });
         return e.outerHTML;
       }
     );
-
     //再度マイページへ
     await Promise.all([
       frame.waitForSelector(
@@ -132,16 +131,16 @@ const main = async () => {
     const checkoutList = await frame.$eval(
       "#opac_popup_target > div > div > div > div > div > div.opac_block_big > form:nth-child(3) > div > div.opac_data_list_wrapper > table",
       (e) => {
-        Array.from(e.children[1].children).forEach((v1, i1) => {
-          if (i1 > 0) {
-            const el = e.children[1].children[i1].children[2];
+        Array.from(e.children[1].children).forEach((_, i) => {
+          if (i > 0) {
+            const el = e.children[1].children[i].children[2];
             el.textContent = el.textContent.substring(
               0,
               el.textContent.lastIndexOf("∥")
             );
           }
-          e.children[1].children[i1].children[5].remove();
-          e.children[1].children[i1].children[1].remove();
+          e.children[1].children[i].children[5].remove();
+          e.children[1].children[i].children[1].remove();
         });
         return e.outerHTML;
       }
