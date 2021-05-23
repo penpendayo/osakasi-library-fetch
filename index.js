@@ -197,27 +197,11 @@ const main = async () => {
 <body>`;
   const htmlfooter = `</body>
 </html>`;
-  const cssStyle = `<style>
-table{
-    border-collapse: collapse;
-    color: #3a4d5b;
-    margin:0 0 10px 0;
-}
-table tr th{
-    border: solid 1px #99ccc6;
-    background-color: #f5ffff;
-    padding: 5px;
-}
-table tr td{
-    border: solid 1px #99ccc6;
-    padding: 5px;
-}
-</style>`;
 
   //index.htmlの作成
   await fs.promises.writeFile(
     __dirname + "/public/index.html",
-    htmlHead + cssStyle + today + body + htmlfooter
+    htmlHead + today + body + htmlfooter
   );
 
   await browser.close();
