@@ -5,6 +5,7 @@
   "main": "index.js",
   "dependencies": {
     "dotenv": "^8.2.0",
+    "jsdom": "^16.5.3",
     "puppeteer": "^8.0.0"
   },
   "devDependencies": {},

@@ -1,5 +1,6 @@
 const fs = require("fs");
 const puppeteer = require("puppeteer");
+const { JSDOM } = require("jsdom");
 require("dotenv").config();
 
 // 1桁の数字を0埋めで2桁にする
@@ -90,26 +91,51 @@ const main = async () => {
       }),
     ]);
 
-    //予約一覧を取得する
-    const reservedbookList = await frame.$eval(
-      "#opac_popup_target > div > div > div > div > div > div.opac_block_big > form:nth-child(3) > div > div.opac_data_list_wrapper > table",
-      (e) => {
-        Array.from(e.children[1].children).forEach((_, i) => {
-          if (i > 0) {
-            const el = e.children[1].children[i].children[2];
-            el.textContent = el.textContent.substring(
-              0,
-              el.textContent.lastIndexOf("∥")
-            );
+    //Tableを加工する関数
+    const tableDataProcessing = async (denyColumList, targetSelector) => {
+      const dom = new JSDOM(
+        await (
+          await (await frame.$(targetSelector)).getProperty("outerHTML")
+        ).jsonValue()
+      );
+      const document = dom.window.document;
+      const element = document.querySelector(".opac_data_list_ex");
+      let table = document.createElement("table");
+      let thead = document.createElement("thead");
+      let tbody = document.createElement("tbody");
+      Array.from(element.children[1].children).forEach((TR, row) => {
+        let tr = document.createElement("tr");
+        Array.from(TR.children).forEach((TD, col) => {
+          if (!denyColumList.includes(col)) {
+            let th =
+              row === 0
+                ? document.createElement("th")
+                : document.createElement("td");
+            th.innerHTML = TD.innerHTML;
+            if (col === 2 && row !== 0) {
+              let tmp = th.innerHTML
+                .substring(0, th.innerHTML.lastIndexOf("∥"))
+                .split("∥");
+              tmp[0] += "<br>";
+              tmp[1] = '<span style="font-size:10px;color:gray">' + tmp[1];
+              tmp[tmp.length - 1] += "</span>";
+              th.innerHTML = tmp.join("");
+            }
+            tr.appendChild(th);
           }
-          e.children[1].children[i].children[7].remove();
-          e.children[1].children[i].children[6].remove();
-          e.children[1].children[i].children[4].remove();
-          e.children[1].children[i].children[3].remove();
-          e.children[1].children[i].children[1].remove();
         });
-        return e.outerHTML;
-      }
+        if (row === 0) thead.appendChild(tr);
+        if (row > 0) tbody.appendChild(tr);
+      });
+      table.appendChild(thead);
+      table.appendChild(tbody);
+      return table.outerHTML;
+    };
+
+    // 予約一覧を取得する
+    const reservedbookList = await tableDataProcessing(
+      [1, 3, 4, 6, 7],
+      "#opac_popup_target > div > div > div > div > div > div.opac_block_big > form:nth-child(3) > div > div.opac_data_list_wrapper > table"
     );
     //再度マイページへ
     await Promise.all([
@@ -128,23 +154,11 @@ const main = async () => {
       }),
     ]);
     //貸し出し一覧を取得する
-    const checkoutList = await frame.$eval(
-      "#opac_popup_target > div > div > div > div > div > div.opac_block_big > form:nth-child(3) > div > div.opac_data_list_wrapper > table",
-      (e) => {
-        Array.from(e.children[1].children).forEach((_, i) => {
-          if (i > 0) {
-            const el = e.children[1].children[i].children[2];
-            el.textContent = el.textContent.substring(
-              0,
-              el.textContent.lastIndexOf("∥")
-            );
-          }
-          e.children[1].children[i].children[5].remove();
-          e.children[1].children[i].children[1].remove();
-        });
-        return e.outerHTML;
-      }
+    const checkoutList = await tableDataProcessing(
+      [1, 5, 6],
+      "#opac_popup_target > div > div > div > div > div > div.opac_block_big > form:nth-child(3) > div > div.opac_data_list_wrapper > table"
     );
+
     await page.close();
     return `<h2>${name}</h2><h3>予約分</h3>  ${reservedbookList}  <h3>貸出分</h3>  ${checkoutList}`;
   };
