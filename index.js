@@ -103,6 +103,8 @@ const main = async () => {
       let table = document.createElement("table");
       table.classList.add("itirann", "tablesorter-blue");
       let thead = document.createElement("thead");
+      thead.style.position = "sticky";
+      thead.style.top = 0;
       let tbody = document.createElement("tbody");
       Array.from(element.children[1].children).forEach((TR, row) => {
         let tr = document.createElement("tr");
