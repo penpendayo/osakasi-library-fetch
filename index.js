@@ -64,7 +64,7 @@ const main = async () => {
         "#_6749 > tbody > tr > td > table > tbody > tr:nth-child(2) > td.th_fsimplecommon_graygradationbox_content.th_fsimplecommon_graygradationbox_content_no_title > div > div > ul > li:nth-child(3) > a"
       ),
       page.click(
-        "body > div > div > div > div.opac_block_body_big > form > div:nth-child(12) > a.btn"
+        ".btn"
       ),
     ]);
     //マイページを開き、目的の要素が出現するまで待つ
