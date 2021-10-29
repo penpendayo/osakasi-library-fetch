@@ -49,23 +49,13 @@ const main = async () => {
     );
 
     //IDとPWを入力する
-    await page.type(
-      "body > div > div > div > div.opac_block_body_big > form > table > tbody > tr:nth-child(1) > td > input[type=text]",
-      id
-    );
-    await page.type(
-      "body > div > div > div > div.opac_block_body_big > form > table > tbody > tr:nth-child(2) > td > input[type=password]",
-      pass
-    );
+    await page.type("input[type=text]", id);
+    await page.type("input[type=password]", pass);
 
     //ログインボタンをクリックして、目的の要素が出現するまで待つ
     await Promise.all([
-      page.waitForSelector(
-        "#_6749 > tbody > tr > td > table > tbody > tr:nth-child(2) > td.th_fsimplecommon_graygradationbox_content.th_fsimplecommon_graygradationbox_content_no_title > div > div > ul > li:nth-child(3) > a"
-      ),
-      page.click(
-        ".btn"
-      ),
+      page.waitForSelector('a[title="ログアウト"]'),
+      page.click("a.btn"),
     ]);
     //マイページを開き、目的の要素が出現するまで待つ
     await Promise.all([
@@ -78,13 +68,11 @@ const main = async () => {
     //フレームを取得する
     const frameHandle = await page.$("iframe[id='usepopup_frm']");
     const frame = await frameHandle.contentFrame();
-    frame.waitForSelector(
-      "#opac_popup_target > div > div > div > div > div.opac_block_big > form > div > div:nth-child(7) > div.opac_block_body_middle_bg > div > button"
-    );
+    await frame.waitForSelector('*[name="askuseform"]');
 
     //予約一覧ページを開く
     await Promise.all([
-      frame.waitForSelector(".opac_data_list_ex"),
+      frame.waitForSelector('form[name="askrsvform"]'),
       frame.evaluate(() => {
         opacSendActionPopup("_7695", "rsvlst.do", document.tmpActForm);
         return false;
@@ -99,7 +87,7 @@ const main = async () => {
         ).jsonValue()
       );
       const document = dom.window.document;
-      const element = document.querySelector(".opac_data_list_ex");
+      const element = document.querySelector("table.opac_data_list_ex");
       let table = document.createElement("table");
       table.classList.add("itirann", "tablesorter-blue");
       let thead = document.createElement("thead");
@@ -138,19 +126,20 @@ const main = async () => {
     // 予約一覧を取得する
     const reservedbookList = await tableDataProcessing(
       [1, 3, 4, 6, 7],
-      "#opac_popup_target > div > div > div > div > div > div.opac_block_big > form:nth-child(3) > div > div.opac_data_list_wrapper > table"
+      'form[name="askrsvform"]'
     );
     //再度マイページへ
     await Promise.all([
-      frame.waitForSelector(
-        "#opac_popup_target > div > div > div > div > div > div.opac_block_big > form > div > div:nth-child(5) > div.opac_block_body_middle_bg > div > button"
-      ),
-      frame.click("#tab_area > li.opac_tab_present > a"),
+      frame.waitForSelector('form[name="askuseform"]'),
+      frame.evaluate(() => {
+        opacSendActionPopup("_7695", "asklst.do", document.tmpActForm);
+        return false;
+      }),
     ]);
 
     //貸し出し一覧ページへ
     await Promise.all([
-      frame.waitForSelector(".opac_data_list_ex"),
+      frame.waitForSelector('form[name="asklenform"]'),
       frame.evaluate(() => {
         opacSendActionPopup("_7695", "lenlst.do", document.tmpActForm);
         return false;
@@ -159,7 +148,7 @@ const main = async () => {
     //貸し出し一覧を取得する
     const checkoutList = await tableDataProcessing(
       [1, 5, 6],
-      "#opac_popup_target > div > div > div > div > div > div.opac_block_big > form:nth-child(3) > div > div.opac_data_list_wrapper > table"
+      'form[name="asklenform"]'
     );
 
     await page.close();
