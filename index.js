@@ -1,11 +1,14 @@
 const fs = require("fs");
 const fetchData = require("./fetchData");
 const { JSDOM } = require("jsdom");
-const { yyyymmddhhmiss } = require("./helper");
+const dayjs = require('dayjs') // v1.9.7
+dayjs.extend(require('dayjs/plugin/timezone'))
+dayjs.extend(require('dayjs/plugin/utc'))
+dayjs.tz.setDefault('Asia/Tokyo')
 
 const main = async () => {
   //現在時刻の取得
-  const today = "取得日時：" + yyyymmddhhmiss();
+  const today = "取得日時：" + dayjs.tz().format('YYYY/MM/DD HH:mm');
   console.log(today);
 
   const {loginIds, passwords, names} = JSON.parse(process.env.LOGIN_INFO)
