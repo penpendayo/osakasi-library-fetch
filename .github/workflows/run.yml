@@ -1,5 +1,7 @@
 name: 🟤大阪市図書館からfetch→htmlファイル生成
-on: [push]
+on:
+  schedule:
+    - cron: "*/15 * * * *"
 jobs:
   deploy:
     runs-on: ubuntu-latest
