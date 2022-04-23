@@ -8,14 +8,12 @@ const main = async () => {
   const today = "取得日時：" + yyyymmddhhmiss();
   console.log(today);
 
-  const idList = process.env.ID.split(",");
-  const pwList = process.env.PW.split(",");
-  const nameList = process.env.NAME.split(",");
+  const {loginIds, passwords, names} = JSON.parse(process.env.LOGIN_INFO)
   let body = "";
-  if (idList.length === pwList.length && pwList.length === nameList.length) {
-    body = await idList.reduce(
+  if (loginIds.length === passwords.length && passwords.length === names.length) {
+    body = await loginIds.reduce(
       async (acc, _, i) =>
-        (await acc) + (await fetchData(idList[i], pwList[i], nameList[i])),
+        (await acc) + (await fetchData(loginIds[i], passwords[i], names[i])),
       Promise.resolve("")
     );
   } else {
@@ -59,7 +57,7 @@ const main = async () => {
     });
   });
   //index.htmlの作成
-  await fs.promises.writeFile(__dirname + "/index.html", dom.serialize());
+  await fs.promises.writeFile(__dirname + "/doc/index.html", dom.serialize());
 
   console.log("取得成功🎉");
 };

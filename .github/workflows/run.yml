@@ -1,0 +1,30 @@
+name: 🟤大阪市図書館からfetch→htmlファイル生成
+on: [push]
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: 🟡Node.jsのインストール
+        uses: actions/setup-node@v2
+        with:
+          node-version: "14.x"
+      - name: 🟡スクレイピング開始
+        run: |
+          npm ci
+          npm start
+          cat index.html
+        env:
+          LOGIN_INFO: ${{ secrets.LOGIN_INFO }}
+      - name: 🟡Gitの設定/commit
+        run: |
+          git config --local user.email "penpen@gmail.com"
+          git config --local user.name "penpen-bot"
+          git checkout -b gh-pages
+          git add .
+          git commit -m `date "+%Y%m%d_%H%M"`
+      - uses: ad-m/github-push-action@v0.6.0
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: gh-pages
+          force: true
