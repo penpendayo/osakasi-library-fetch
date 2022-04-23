@@ -1,25 +1,7 @@
 const fs = require("fs");
 const fetchData = require("./fetchData");
-require("dotenv").config();
-
-// 1桁の数字を0埋めで2桁にする
-const toDoubleDigits = (num) => {
-  num += "";
-  if (num.length === 1) {
-    num = "0" + num;
-  }
-  return num;
-};
-// 日付をYYYY/MM/DD HH:DD:MI:SS形式で取得
-const yyyymmddhhmiss = () => {
-  const date = new Date();
-  const yyyy = date.getFullYear();
-  const mm = toDoubleDigits(date.getMonth() + 1);
-  const dd = toDoubleDigits(date.getDate());
-  const hh = toDoubleDigits(date.getHours());
-  const mi = toDoubleDigits(date.getMinutes());
-  return yyyy + "/" + mm + "/" + dd + " " + hh + ":" + mi;
-};
+const { JSDOM } = require("jsdom");
+const { yyyymmddhhmiss } = require("./helper");
 
 const main = async () => {
   //現在時刻の取得
@@ -59,12 +41,25 @@ const main = async () => {
 <body>`;
   const htmlfooter = `</body>
 </html>`;
-
+  //重複で予約してる本を赤字で表示
+  const uniqeCheck = [];
+  const dom = new JSDOM(htmlHead + today + body + htmlfooter);
+  dom.window.document.querySelectorAll("table").forEach((e) => {
+    [...e.rows].forEach((_, row) => {
+      if (row === 0) return;
+      const currentCellElement = e.rows[row].cells[1];
+      const uniqueBook = uniqeCheck.find((e) => e.textContent === currentCellElement.textContent);
+      if (uniqueBook) {
+        const replaceHTML = `<span style="color:red;">（😫重複してます）${currentCellElement.innerHTML}</span>`;
+        uniqueBook.innerHTML = replaceHTML;
+        currentCellElement.innerHTML = replaceHTML;
+      } else {
+        uniqeCheck.push(currentCellElement);
+      }
+    });
+  });
   //index.htmlの作成
-  await fs.promises.writeFile(
-    __dirname + "/public/index.html",
-    htmlHead + today + body + htmlfooter
-  );
+  await fs.promises.writeFile(__dirname + "/index.html", dom.serialize());
 
   console.log("取得成功🎉");
 };
