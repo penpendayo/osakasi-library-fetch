@@ -60,7 +60,7 @@ const main = async () => {
     });
   });
   //index.htmlの作成
-  await fs.promises.writeFile(__dirname + "/doc/index.html", dom.serialize());
+  await fs.promises.writeFile(__dirname + "/result.html", dom.serialize());
 
   console.log("取得成功🎉");
 };

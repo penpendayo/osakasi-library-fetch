@@ -13,7 +13,6 @@ jobs:
         run: |
           npm ci
           npm start
-          cat index.html
         env:
           LOGIN_INFO: ${{ secrets.LOGIN_INFO }}
       - name: 🟡Gitの設定/commit
@@ -22,7 +21,7 @@ jobs:
           git config --local user.name "penpen-bot"
           git checkout -b gh-pages
           git add .
-          git commit -m `date "+%Y%m%d_%H%M"`
+          git commit -m `TZ=Asia/Tokyo date "+%Y%m%d_%H%M"`
       - uses: ad-m/github-push-action@v0.6.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
