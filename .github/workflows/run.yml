@@ -1,5 +1,6 @@
 name: 🟤大阪市図書館からfetch→htmlファイル生成
 on:
+  workflow_dispatch:
   schedule:
     - cron: "*/15 * * * *"
 jobs:
