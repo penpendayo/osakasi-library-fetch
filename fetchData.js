@@ -3,9 +3,11 @@ const { JSDOM } = require("jsdom");
 
 const fetchData = async (id, pass, name) => {
   console.log(`${name}のfetchを開始: `);
-  //ブラウザ初期化
+
   const browser = await puppeteer.launch();
   const page = await browser.newPage();
+  console.log(`ブラウザ初期化: `);
+
   //画像、css、フォントファイルを拒否する
   await page.setRequestInterception(true);
   page.on("request", (req) => {
@@ -15,22 +17,28 @@ const fetchData = async (id, pass, name) => {
       req.continue();
     }
   });
+  
 
   //ログインページに行く
   await page.goto(
     "https://web.oml.city.osaka.lg.jp/webopac_i_ja/login.do?url=ufisnd.do%3Fredirect_page_id%3D13",
     { waitUntil: "networkidle0" }
   );
+  console.log(`ログインページに移動: `);
+
 
   //IDとPWを入力する
   await page.type("input[type=text]", id);
   await page.type("input[type=password]", pass);
+  
 
   //ログインボタンをクリックして、目的の要素が出現するまで待つ
   await Promise.all([
     page.waitForSelector('a[title="ログアウト"]'),
     page.click("a.btn"),
   ]);
+  console.log(`ログインボタンをクリックして、目的の要素が出現するまで待つ: `);
+
   //マイページを開き、目的の要素が出現するまで待つ
   await Promise.all([
     page.waitForSelector("iframe[id='usepopup_frm']"),
@@ -38,6 +46,8 @@ const fetchData = async (id, pass, name) => {
       waitUntil: "networkidle0",
     }),
   ]);
+  console.log(`マイページを開き、目的の要素が出現するまで待つ `);
+
 
   //フレームを取得する
   const frameHandle = await page.$("iframe[id='usepopup_frm']");
