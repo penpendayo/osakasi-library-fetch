@@ -2,6 +2,7 @@ const puppeteer = require("puppeteer");
 const { JSDOM } = require("jsdom");
 
 const fetchData = async (id, pass, name) => {
+  console.log(`${name}のfetchを開始: `);
   //ブラウザ初期化
   const browser = await puppeteer.launch();
   const page = await browser.newPage();
@@ -121,7 +122,6 @@ const fetchData = async (id, pass, name) => {
 
     const isExitsRentalBooks =
       rentalBooks.match(/\s0点/) === null ? false : true;
-    console.log("isExitsRentalBooks", isExitsRentalBooks);
     if (isExitsRentalBooks) return "なし";
     //貸し出し一覧ページへ
     await Promise.all([
@@ -137,6 +137,8 @@ const fetchData = async (id, pass, name) => {
 
   await page.close();
   await browser.close();
+  console.log(`${name}のfetchを終了: `);
+
   return `<h2>${name}</h2><h3>予約分</h3>  ${reservedbookList}  <h3>貸出分</h3>  ${checkoutList}`;
 };
 

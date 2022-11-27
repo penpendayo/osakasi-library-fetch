@@ -12,16 +12,15 @@ const main = async () => {
   console.log(today);
 
   const {loginIds, passwords, names} = JSON.parse(process.env.LOGIN_INFO)
-  let body = "";
-  if (loginIds.length === passwords.length && passwords.length === names.length) {
-    body = await loginIds.reduce(
-      async (acc, _, i) =>
-        (await acc) + (await fetchData(loginIds[i], passwords[i], names[i])),
-      Promise.resolve("")
-    );
-  } else {
-    throw new Error("ID、PW、名前のいずれかが不足もしくはオーバーしています。");
-  }
+  const isCorrectUserInfo = loginIds.length === passwords.length && passwords.length === names.length;
+  if (!isCorrectUserInfo) throw new Error("ID、PW、名前のいずれかが不足もしくはオーバーしています。");
+
+  const body = await loginIds.reduce(
+    async (acc, _, i) =>
+      (await acc) + (await fetchData(loginIds[i], passwords[i], names[i])),
+    ""
+  );
+
 
   const htmlHead = `<!DOCTYPE html>
 <html lang="en">
@@ -40,11 +39,26 @@ const main = async () => {
     </script>
 </head>
 <body>`;
-  const htmlfooter = `</body>
-</html>`;
-  //重複で予約してる本を赤字で表示
-  const uniqeCheck = [];
+  const htmlfooter = `</body></html>`;
+
   const dom = new JSDOM(htmlHead + today + body + htmlfooter);
+  duplicateReservedBooksToRedText(dom);
+  
+  //index.htmlの作成
+  await fs.promises.writeFile(__dirname + "/result.html", dom.serialize());
+
+  console.log("全員分の取得に成功しました🎉");
+};
+
+main().catch((e) => {
+  console.log("何らかのエラーが発生しました💧");
+  console.log(e);
+  process.exit(-1);
+});
+
+
+function duplicateReservedBooksToRedText(dom){
+  const uniqeCheck = [];
   dom.window.document.querySelectorAll("table").forEach((e) => {
     [...e.rows].forEach((_, row) => {
       if (row === 0) return;
@@ -59,14 +73,4 @@ const main = async () => {
       }
     });
   });
-  //index.htmlの作成
-  await fs.promises.writeFile(__dirname + "/result.html", dom.serialize());
-
-  console.log("取得成功🎉");
-};
-
-main().catch((e) => {
-  console.log("何らかのエラー💧");
-  console.log(e);
-  process.exit(-1);
-});
+}
