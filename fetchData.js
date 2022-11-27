@@ -11,10 +11,10 @@ const fetchData = async (id, pass, name) => {
 
   const browser = await puppeteer.launch();
   console.log(`ブラウザ初期化:`);
-  console.dir(browser);
+  // console.dir(browser);
   const page = await browser.newPage();
   console.log(`ページ初期化:`);
-  console.dir(page);
+  // console.dir(page);
 
 
   //画像、css、フォントファイルを拒否する
