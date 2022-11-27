@@ -49,13 +49,13 @@ const main = async () => {
 
   console.log("全員分の取得に成功しました🎉");
 };
-
-main().catch((e) => {
+try {
+  main();
+} catch (error) {
   console.log("何らかのエラーが発生しました💧");
   console.log(e);
   process.exit(-1);
-});
-
+}
 
 function duplicateReservedBooksToRedText(dom){
   const uniqeCheck = [];
