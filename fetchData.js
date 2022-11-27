@@ -5,8 +5,9 @@ const fetchData = async (id, pass, name) => {
   console.log(`${name}のfetchを開始: `);
   try {
     const browser = await puppeteer.launch();
-    const page = await browser.newPage();
     console.log(`ブラウザ初期化: `);
+    const page = await browser.newPage();
+    console.log(`ページ作成: `);
   } catch (error) {
     console.log(error);
   }
