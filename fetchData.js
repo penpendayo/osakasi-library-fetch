@@ -3,10 +3,14 @@ const { JSDOM } = require("jsdom");
 
 const fetchData = async (id, pass, name) => {
   console.log(`${name}のfetchを開始: `);
+  try {
+    const browser = await puppeteer.launch();
+    const page = await browser.newPage();
+    console.log(`ブラウザ初期化: `);
+  } catch (error) {
+    console.log(error);
+  }
 
-  const browser = await puppeteer.launch();
-  const page = await browser.newPage();
-  console.log(`ブラウザ初期化: `);
 
   //画像、css、フォントファイルを拒否する
   await page.setRequestInterception(true);
