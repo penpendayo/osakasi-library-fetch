@@ -33,7 +33,7 @@ const fetchData = async (id, pass, name) => {
     "https://web.oml.city.osaka.lg.jp/webopac_i_ja/login.do?url=ufisnd.do%3Fredirect_page_id%3D13",
     { waitUntil: "networkidle0" }
   );
-  console.log(`ログインページに移動: `);
+  console.log(`ログインページに移動完了:  `);
 
 
   //IDとPWを入力する
@@ -46,7 +46,7 @@ const fetchData = async (id, pass, name) => {
     page.waitForSelector('a[title="ログアウト"]'),
     page.click("a.btn"),
   ]);
-  console.log(`ログインボタンをクリックして、目的の要素が出現するまで待つ: `);
+  console.log(`ログイン完了:  `);
 
   //マイページを開き、目的の要素が出現するまで待つ
   await Promise.all([
@@ -55,7 +55,7 @@ const fetchData = async (id, pass, name) => {
       waitUntil: "networkidle0",
     }),
   ]);
-  console.log(`マイページを開き、目的の要素が出現するまで待つ `);
+  console.log(`マイページの表示完了:  `);
 
 
   //フレームを取得する
