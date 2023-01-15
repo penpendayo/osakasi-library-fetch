@@ -69,12 +69,12 @@ export class ResultProcessor {
           );
           currentCellElement.innerHTML =
             colors[currentColorIntex % colors.length].prefixStr +
-            "重複:" +
+            `重複${currentColorIntex}:` +
             currentCellElement.innerHTML;
 
           sameBook.style.setProperty("color", colors[currentColorIntex % colors.length].color);
           sameBook.innerHTML =
-            colors[currentColorIntex % colors.length].prefixStr + "重複:" + sameBook.innerHTML;
+            colors[currentColorIntex % colors.length].prefixStr + `重複${currentColorIntex}:` + sameBook.innerHTML;
           currentColorIntex++;
         } else {
           uniqeCheck.push(currentCellElement);
