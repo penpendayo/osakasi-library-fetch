@@ -3,6 +3,8 @@ on:
   workflow_dispatch:
   schedule:
     - cron: "*/15 * * * *"
+  branches:
+    - '**'
 jobs:
   deploy:
     runs-on: ubuntu-latest
