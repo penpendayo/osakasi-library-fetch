@@ -35,7 +35,8 @@ type LoginInfo = {
 
     const borrowedBookList = resultProcessor.FromBorrowedBookList(borrowedBookListDom);
     const reservedBookList = resultProcessor.FromReservedBookList(reservedBookListDom);
-    const bodyContent = `<h2>${name}</h2><h3>予約分</h3>  ${reservedBookList}  <h3>貸出分</h3>  ${borrowedBookList}`;
+    const today = new Date().toLocaleString("ja");
+    const bodyContent = `取得日時: ${today}<h2>${name}</h2><h3>予約分</h3>  ${reservedBookList}  <h3>貸出分</h3>  ${borrowedBookList}`;
     htmlBuilder.AddBody(bodyContent);
   }
   const dom = htmlBuilder.GetHtmlDom();

@@ -4,7 +4,6 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
-    "dayjs": "^1.11.6",
     "dotenv": "^16.0.3",
     "jsdom": "^20.0.3",
     "puppeteer": "^19.3.0",
