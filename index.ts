@@ -26,7 +26,7 @@ type LoginInfo = {
   const htmlBuilder = new HTMLBuilder();
   const osakashiLibraryFether = new OsakashiLibraryFetcher();
 
-  const today = new Date().toLocaleString("ja");
+  const today = new Date().toLocaleString("ja-JP", { timeZone: "Asia/Tokyo" });
   htmlBuilder.AddBody(`取得日時: ${today}`);
 
   for (const { id, name, pw } of loginInfos) {
