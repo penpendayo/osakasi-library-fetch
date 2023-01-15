@@ -4,8 +4,8 @@ on:
   schedule:
     - cron: "*/15 * * * *"
   push:
-    branches:
-      - release
+    branches: # any branches
+      - '**'
 jobs:
   deploy:
     runs-on: ubuntu-latest
