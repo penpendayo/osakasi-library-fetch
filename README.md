@@ -2,7 +2,7 @@
 
 [大阪市図書館の WEB サイト](https://www.oml.city.osaka.lg.jp/)から「予約一覧」と「貸出一覧」を取得して HTML ファイルを生成するツールです。  
 
-[サンプルサイト](https://library-osakashi.web.app/)
+[サンプルサイト](https://penpendayo.github.io/osakasi-library-fetch/result.html)
 
 ## 使い方📖
 
@@ -13,24 +13,24 @@
 ### 3.GitHubの設定からActions secretsを設定
 GitHubのプロジェクト設定から、`LOGIN_INFO`というキー名で、以下のような値を設定します。
 ```
-{
-  "ids": ["1人目のログインID", "2人目のログインID"],
-  "passwords": ["1人目のパスワード", "2人目のパスワード"],
-  "names": ["1人目の名前", "2人目の名前"]
-}
+  [
+    {
+      "name": "やまだ",
+      "id": "2012534527-2",
+      "pw": "235234"
+    },
+    {
+      "name": "たなか",
+      "id": "223545057-9",
+      "pw": "3452345"
+    }
+  ]
 ```
-例えば以下のような感じです。
-```
-{
-  "ids": ["abc", "cde"],
-  "passwords": ["1234", "5678"],
-  "names": ["しん", "かな"]
-}
-```
+
 namesの部分は任意です。（サンプルサイトをご覧ください）
 
 ### 4.取得
-15分に1回、GitHubActionが実行されます。
+15分に1回、GitHub Actionsが実行されます。
 生成場所は、`gh-pages`ブランチの`/result.html`です。
 
 ## その他🏃
