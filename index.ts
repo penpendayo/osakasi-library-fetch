@@ -27,7 +27,7 @@ type LoginInfo = {
   const osakashiLibraryFether = new OsakashiLibraryFetcher();
 
   const today = new Date().toLocaleString("ja");
-  htmlBuilder.AddBody(today);
+  htmlBuilder.AddBody(`取得日時: ${today}`);
 
   for (const { id, name, pw } of loginInfos) {
     const { borrowedBookListDom, reservedBookListDom } = await osakashiLibraryFether.Fetch({
