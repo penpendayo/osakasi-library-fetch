@@ -26,7 +26,13 @@ type LoginInfo = {
   const htmlBuilder = new HTMLBuilder();
   const osakashiLibraryFether = new OsakashiLibraryFetcher();
 
-  const today = new Date().toLocaleString("ja-JP", { timeZone: "Asia/Tokyo" });
+  const today = new Intl.DateTimeFormat("ja-JP", {
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    timeZone: "Asia/Tokyo",
+  }).format(new Date());
   htmlBuilder.AddBody(`取得日時: ${today}`);
 
   for (const { id, name, pw } of loginInfos) {
