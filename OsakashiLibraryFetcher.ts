@@ -29,7 +29,7 @@ export class OsakashiLibraryFetcher {
   async Fetch(props: FetchProps) {
     const { id, name, pw } = props;
     if (!id || !pw || !name) throw new Error("id,pw,nameのいずれかが間違っています");
-    
+
     await this.#launchBrowser();
     if (!this.#browser || !this.#page) throw new Error("pageとbrowserが初期化されていません");
 
@@ -73,13 +73,12 @@ export class OsakashiLibraryFetcher {
     await Promise.all([
       frame.waitForSelector('form[name="askrsvform"]'),
       frame.evaluate(() => {
-        // @ts-ignore 
+        // @ts-ignore
         opacSendActionPopup("_7695", "rsvlst.do", document.tmpActForm);
         return false;
       }),
     ]);
     console.log(`予約一覧ページの表示完了:  `);
-
 
     // 予約一覧を取得する
     const reservedBookListDom = new JSDOM(
@@ -89,7 +88,7 @@ export class OsakashiLibraryFetcher {
     await Promise.all([
       frame.waitForSelector('form[name="askuseform"]'),
       frame.evaluate(() => {
-        // @ts-ignore 
+        // @ts-ignore
         opacSendActionPopup("_7695", "asklst.do", document.tmpActForm);
         return false;
       }),
@@ -100,27 +99,35 @@ export class OsakashiLibraryFetcher {
       await (await frame.$$(".opac_description_area"))[1].getProperty("textContent")
     ).jsonValue();
     const isExitsRentalBooks = rentalBooks!.match(/\s0点/) === null ? false : true;
-    if (isExitsRentalBooks) new JSDOM("");
+    if (isExitsRentalBooks) {
+      await this.#closeBrowser();
+      return {
+        reservedBookListDom,
+        borrowedBookListDom: new JSDOM(""),
+      };
+    } else {
+      //貸し出し一覧ページへ
+      await Promise.all([
+        frame.waitForSelector('form[name="asklenform"]'),
+        frame.evaluate(() => {
+          // @ts-ignore
+          opacSendActionPopup("_7695", "lenlst.do", document.tmpActForm);
+          return false;
+        }),
+      ]);
+      //貸し出し一覧を取得する
+      const borrowedBookListDom = new JSDOM(
+        await (
+          await (await frame.$('form[name="asklenform"]'))!.getProperty("outerHTML")
+        ).jsonValue()
+      );
 
-    //貸し出し一覧ページへ
-    await Promise.all([
-      frame.waitForSelector('form[name="asklenform"]'),
-      frame.evaluate(() => {
-        // @ts-ignore 
-    opacSendActionPopup("_7695", "lenlst.do", document.tmpActForm);
-    return false;
-  }),
-    ]);
-    //貸し出し一覧を取得する
-    const borrowedBookListDom = new JSDOM(
-      await (await (await frame.$('form[name="asklenform"]'))!.getProperty("outerHTML")).jsonValue()
-    );
-
-    await this.#closeBrowser();
-    return {
-      reservedBookListDom,
-      borrowedBookListDom,
-    };
+      await this.#closeBrowser();
+      return {
+        reservedBookListDom,
+        borrowedBookListDom,
+      };
+    }
   }
 
   async #closeBrowser() {

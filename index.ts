@@ -55,4 +55,5 @@ type LoginInfo = {
   return;
 })().catch((e) => {
   console.log("🙅何らかのエラーが発生しました!!", e);
+  return;
 });
