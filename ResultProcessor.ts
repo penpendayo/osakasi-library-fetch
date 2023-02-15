@@ -20,7 +20,7 @@ export class ResultProcessor {
   #createTable(denyColumList: number[], dom: JSDOM) {
     const document = dom.window.document;
     const element = document.querySelector("table.opac_data_list_ex");
-    if (!element) throw new Error("tableDataProcessing: elementがfalthyです");
+    if (!element) return "";
 
     let table = document.createElement("table");
     table.classList.add("itirann", "tablesorter-blue");
@@ -115,4 +115,3 @@ const colors = [
     prefixStr: "⚫",
   },
 ] as const;
-
