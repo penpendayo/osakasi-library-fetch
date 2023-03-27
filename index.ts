@@ -50,7 +50,7 @@ type LoginInfo = {
   }
   const dom = htmlBuilder.GetHtmlDom();
   const processedDom = resultProcessor.DuplicateBooksToRedText(dom);
-  await fs.promises.writeFile(__dirname + "/result.html", processedDom.serialize());
+  await fs.promises.writeFile(__dirname + "/index.html", processedDom.serialize());
   console.log("🎉正常に終了しました!!");
   return;
 })().catch((e) => {
