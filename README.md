@@ -2,7 +2,7 @@
 
 [大阪市図書館の WEB サイト](https://www.oml.city.osaka.lg.jp/)から「予約一覧」と「貸出一覧」を取得して HTML ファイルを生成するツールです。  
 
-[サンプルサイト](https://penpendayo.github.io/osakasi-library-fetch/result.html)
+[サンプルサイト](https://osakashi-library.penpen-dev.com/)
 
 ## 使い方📖
 
@@ -31,7 +31,7 @@ namesの部分は任意です。（サンプルサイトをご覧ください）
 
 ### 4.取得
 15分に1回、GitHub Actionsが実行されます。
-生成場所は、`gh-pages`ブランチの`/result.html`です。
+生成場所は、`gh-pages`ブランチの`/index.html`です。
 
 ## ライセンス
 [SUSHI-WARE LICENSE](https://github.com/MakeNowJust/sushi-ware)🍣
