@@ -21,6 +21,8 @@ jobs:
           npm start
         env:
           LOGIN_INFO: ${{ secrets.LOGIN_INFO }}
+      - name: cnameファイルの追加
+        run: echo 'osakashi-library.penpen-dev.com' > CNAME
       - name: Gitの設定とcommit
         run: |
           git config --local user.email "penpen@gmail.com"
