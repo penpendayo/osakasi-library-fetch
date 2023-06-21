@@ -96,9 +96,9 @@ export class OsakashiLibraryFetcher {
 
     //貸し出し数が0冊だとボタンが表示されないので処理丸ごとスキップする
     const rentalBooks = await (
-      await (await frame.$$(".opac_description_area"))[1].getProperty("textContent")
+      await (await frame.$$(".opac_block_body_big"))[0].getProperty("textContent")
     ).jsonValue();
-    const isExitsRentalBooks = rentalBooks!.match(/0点/) === null ? false : true;
+    const isExitsRentalBooks = rentalBooks!.match(/貸出されている資料 0点/) === null ? false : true;
     if (isExitsRentalBooks) {
       console.log("貸出数が0")
       await this.#closeBrowser();
