@@ -98,7 +98,7 @@ export class OsakashiLibraryFetcher {
     const rentalBooks = await (
       await (await frame.$$(".opac_block_body_big"))[0].getProperty("textContent")
     ).jsonValue();
-    const isExitsRentalBooks = rentalBooks!.match(/貸出されている資料 0点/) === null ? false : true;
+    const isExitsRentalBooks = rentalBooks!.match(/貸出されている資料\s0点/) === null ? false : true;
     if (isExitsRentalBooks) {
       console.log("貸出数が0")
       await this.#closeBrowser();
