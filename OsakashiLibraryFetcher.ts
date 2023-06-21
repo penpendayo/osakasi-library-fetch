@@ -100,12 +100,14 @@ export class OsakashiLibraryFetcher {
     ).jsonValue();
     const isExitsRentalBooks = rentalBooks!.match(/0点/) === null ? false : true;
     if (isExitsRentalBooks) {
+      console.log("貸出数が0")
       await this.#closeBrowser();
       return {
         reservedBookListDom,
         borrowedBookListDom: new JSDOM(""),
       };
     } else {
+      console.log("貸出数が1以上")
       //貸し出し一覧ページへ
       await Promise.all([
         frame.waitForSelector('form[name="asklenform"]'),
