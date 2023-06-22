@@ -2,7 +2,7 @@ name: 大阪市図書館からfetch→htmlファイル生成のCD
 on:
   workflow_dispatch:
   schedule:
-    - cron: "* */50 * * *"
+    - cron: "*/15 * * * *"
   push:
     branches: # any branches
       - '**'
