@@ -1,4 +1,4 @@
-name: 大阪市図書館からfetch→htmlファイル生成のCD
+name: スクレイピングしてページを組み立ててデプロイする
 on:
   workflow_dispatch:
   schedule:
