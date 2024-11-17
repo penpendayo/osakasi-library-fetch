@@ -4,7 +4,7 @@ on:
   schedule:
     - cron: "0 9,21 * * *"
   push:
-    branches: # any branches
+    branches:
       - '**'
 jobs:
   deploy:
@@ -13,31 +13,21 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Node.jsのインストール
+      - name: Install Node.js
         uses: actions/setup-node@v3
         with:
           node-version: 16
 
-      - name: スクレイピング開始
+      - name: Start Scraping
         run: |
           npm ci
           npm start
         env:
           LOGIN_INFO: ${{ secrets.LOGIN_INFO }}
 
-      - name: cnameファイルの追加
-        run: echo 'osakashi-library.penpen-dev.com' > CNAME
-
-      - name: Gitの設定とcommit
-        run: |
-          git config --local user.email "penpen@gmail.com"
-          git config --local user.name "penpen-bot"
-          git checkout -b gh-pages
-          git add .
-          git commit -m `TZ=Asia/Tokyo date "+%Y%m%d_%H%M"`
-
-      - uses: ad-m/github-push-action@v0.6.0
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          branch: gh-pages
-          force: true
+          publish_dir: ./
+          cname: osakashi-library.penpen-dev.com
