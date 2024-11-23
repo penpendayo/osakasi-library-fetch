@@ -2,7 +2,7 @@ name: スクレイピングしてページを組み立ててデプロイする
 on:
   workflow_dispatch:
   schedule:
-    - cron: "0 9,21 * * *"
+    - cron: "*/15 * * * *"
   push:
     branches:
       - '**'
