@@ -31,7 +31,6 @@ namesの部分は任意です。（サンプルサイトをご覧ください）
 
 ### 4.取得
 15分に1回、GitHub Actionsが実行されます。
-生成場所は、`gh-pages`ブランチの`/index.html`です。
 
 ## ライセンス
 [SUSHI-WARE LICENSE](https://github.com/MakeNowJust/sushi-ware)🍣
