@@ -13,7 +13,9 @@ export class OsakashiLibraryFetcher {
 
   async #launchBrowser() {
     console.log(`#launchBrowser: start`);
-    this.#browser = await puppeteer.launch();
+    this.#browser = await puppeteer.launch({
+      args: ['--no-sandbox'],
+    });
     this.#page = await this.#browser.newPage();
 
     //画像、css、フォントファイルを拒否する
