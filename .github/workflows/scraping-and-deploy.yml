@@ -1,7 +1,7 @@
 name: スクレイピングしてページを組み立ててデプロイする
 on:
   schedule:
-    - cron: "*/15 * * * *"
+    - cron: "*/30 * * * *"
   push:
     branches: ["main"]
   workflow_dispatch:
@@ -17,6 +17,7 @@ concurrency:
 
 jobs:
   build:
+    timeout-minutes: 20
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -38,6 +39,7 @@ jobs:
           path: ./ #面倒くさいので全部アップロードするようにしてる。本来ならindex.htmlだけアップしたい
 
   deploy:
+    timeout-minutes: 20
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
